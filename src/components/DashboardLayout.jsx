@@ -74,44 +74,36 @@ const DashboardLayout = ({
 				initial={{ width: sidebarOpen ? 280 : 80 }}
 				animate={{ width: sidebarOpen ? 280 : 80 }}
 				transition={{ duration: 0.3, ease: "easeInOut" }}
-				className="hidden lg:flex bg-white border-r border-gray-200 flex-col shadow-sm z-30"
+				className="hidden lg:flex bg-[#1C1E26] border-r border-gray-800 flex-col shadow-xl z-30"
 			>
 				{/* Sidebar Header */}
-				<div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-					<AnimatePresence mode="wait">
-						{sidebarOpen && (
-							<motion.div
-								initial={{ opacity: 0, x: -20 }}
-								animate={{ opacity: 1, x: 0 }}
-								exit={{ opacity: 0, x: -20 }}
-								transition={{ duration: 0.2 }}
-								className="flex items-center space-x-3"
-							>
-								<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-									<Dumbbell className="h-6 w-6 text-white" />
-								</div>
-								<div>
-									<span className="text-xl font-bold text-gray-800">
-										Gymly
-									</span>
-									<p className="text-xs text-gray-500">
-										Health Club System
-									</p>
-								</div>
-							</motion.div>
-						)}
-					</AnimatePresence>
+				<div className="h-16 flex items-center justify-between px-4 border-b border-gray-800">
+					{sidebarOpen && (
+						<div className="flex items-center space-x-3">
+							<div className="w-10 h-10 bg-gradient-to-br from-[#4B5CFF] to-[#9333EA] rounded-xl flex items-center justify-center shadow-lg">
+								<Dumbbell className="h-6 w-6 text-white" />
+							</div>
+							<div>
+								<span className="text-xl font-bold text-white">
+									Gymly
+								</span>
+								<p className="text-xs text-gray-400">
+									Health Club System
+								</p>
+							</div>
+						</div>
+					)}
 
 					<Button
 						variant="ghost"
 						size="icon"
 						onClick={toggleSidebar}
-						className="h-9 w-9 hover:bg-gray-100 flex-shrink-0"
+						className="h-9 w-9 hover:bg-gray-800 flex-shrink-0 text-gray-400 hover:text-white"
 					>
 						{sidebarOpen ? (
-							<ChevronLeft className="h-5 w-5 text-gray-600" />
+							<ChevronLeft className="h-5 w-5" />
 						) : (
-							<ChevronRight className="h-5 w-5 text-gray-600" />
+							<ChevronRight className="h-5 w-5" />
 						)}
 					</Button>
 				</div>
@@ -128,49 +120,24 @@ const DashboardLayout = ({
 							return (
 								<Link key={module.name} to={module.path}>
 									<motion.div
-										whileHover={{ scale: 1.02, x: 4 }}
+										whileHover={!isActive ? { x: 4 } : {}}
 										whileTap={{ scale: 0.98 }}
 										className={`
                       w-full flex items-center space-x-3 px-4 py-3 rounded-lg
-                      transition-all duration-200 cursor-pointer
+                      transition-all duration-300 cursor-pointer
                       ${
 							isActive
-								? "bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 font-medium shadow-sm border-l-4 border-blue-600"
-								: "text-gray-700 hover:bg-gray-50 border-l-4 border-transparent"
+								? "bg-gradient-to-r from-[#4B5CFF] to-[#9333EA] text-white font-medium shadow-lg"
+								: "text-gray-400 hover:bg-gray-800 hover:text-white"
 						}
                     `}
 									>
-										<Icon
-											className={`h-5 w-5 flex-shrink-0 ${
-												isActive
-													? "text-blue-600"
-													: "text-gray-500"
-											}`}
-										/>
-										<AnimatePresence mode="wait">
-											{sidebarOpen && (
-												<motion.span
-													initial={{
-														opacity: 0,
-														width: 0,
-													}}
-													animate={{
-														opacity: 1,
-														width: "auto",
-													}}
-													exit={{
-														opacity: 0,
-														width: 0,
-													}}
-													transition={{
-														duration: 0.2,
-													}}
-													className="text-sm whitespace-nowrap overflow-hidden"
-												>
-													{module.name}
-												</motion.span>
-											)}
-										</AnimatePresence>
+										<Icon className="h-5 w-5 flex-shrink-0" />
+										{sidebarOpen && (
+											<span className="text-sm whitespace-nowrap">
+												{module.name}
+											</span>
+										)}
 									</motion.div>
 								</Link>
 							);
@@ -179,46 +146,32 @@ const DashboardLayout = ({
 				</ScrollArea>
 
 				{/* Sidebar Footer */}
-				<div className="p-4 border-t border-gray-200">
-					<AnimatePresence mode="wait">
-						{sidebarOpen ? (
-							<motion.div
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								exit={{ opacity: 0 }}
-								transition={{ duration: 0.2 }}
-								className="space-y-2"
+				<div className="p-4 border-t border-gray-800">
+					{sidebarOpen ? (
+						<div className="space-y-2">
+							<Button
+								variant="ghost"
+								className="w-full justify-start text-sm text-gray-400 hover:text-white hover:bg-gray-800"
 							>
-								<Button
-									variant="ghost"
-									className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
-								>
-									<Settings className="h-4 w-4 mr-2" />
-									Settings
-								</Button>
-								<div className="text-xs text-gray-400 text-center pt-2">
-									© 2025 Gymly
-								</div>
-							</motion.div>
-						) : (
-							<motion.div
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								exit={{ opacity: 0 }}
-								transition={{ duration: 0.2 }}
-								className="flex flex-col items-center space-y-3"
+								<Settings className="h-4 w-4 mr-2" />
+								Settings
+							</Button>
+							<div className="text-xs text-gray-500 text-center pt-2">
+								© 2025 Gymly
+							</div>
+						</div>
+					) : (
+						<div className="flex flex-col items-center space-y-3">
+							<Button
+								variant="ghost"
+								size="icon"
+								className="h-9 w-9 text-gray-400 hover:text-white hover:bg-gray-800"
 							>
-								<Button
-									variant="ghost"
-									size="icon"
-									className="h-9 w-9"
-								>
-									<Settings className="h-5 w-5 text-gray-500" />
-								</Button>
-								<div className="w-2 h-2 bg-green-500 rounded-full"></div>
-							</motion.div>
-						)}
-					</AnimatePresence>
+								<Settings className="h-5 w-5" />
+							</Button>
+							<div className="w-2 h-2 bg-[#10B981] rounded-full"></div>
+						</div>
+					)}
 				</div>
 			</motion.aside>
 
@@ -238,19 +191,19 @@ const DashboardLayout = ({
 							animate={{ x: 0 }}
 							exit={{ x: -280 }}
 							transition={{ duration: 0.3, ease: "easeInOut" }}
-							className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white border-r border-gray-200 flex flex-col shadow-xl z-50"
+							className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-[#1C1E26] border-r border-gray-800 flex flex-col shadow-xl z-50"
 						>
 							{/* Mobile Sidebar Header */}
-							<div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+							<div className="h-16 flex items-center justify-between px-4 border-b border-gray-800">
 								<div className="flex items-center space-x-3">
-									<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+									<div className="w-10 h-10 bg-gradient-to-br from-[#4B5CFF] to-[#9333EA] rounded-xl flex items-center justify-center shadow-lg">
 										<Dumbbell className="h-6 w-6 text-white" />
 									</div>
 									<div>
-										<span className="text-xl font-bold text-gray-800">
+										<span className="text-xl font-bold text-white">
 											Gymly
 										</span>
-										<p className="text-xs text-gray-500">
+										<p className="text-xs text-gray-400">
 											Health Club System
 										</p>
 									</div>
@@ -278,21 +231,15 @@ const DashboardLayout = ({
 													whileTap={{ scale: 0.98 }}
 													className={`
                             w-full flex items-center space-x-3 px-4 py-3 rounded-lg
-                            transition-all duration-200 cursor-pointer
+                            transition-all duration-300 cursor-pointer
                             ${
 								isActive
-									? "bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 font-medium shadow-sm"
-									: "text-gray-700 hover:bg-gray-50"
+									? "bg-gradient-to-r from-[#4B5CFF] to-[#9333EA] text-white font-medium shadow-lg"
+									: "text-gray-400 hover:bg-gray-800 hover:text-white"
 							}
                           `}
 												>
-													<Icon
-														className={`h-5 w-5 flex-shrink-0 ${
-															isActive
-																? "text-blue-600"
-																: "text-gray-500"
-														}`}
-													/>
+													<Icon className="h-5 w-5 flex-shrink-0" />
 													<span className="text-sm">
 														{module.name}
 													</span>
@@ -304,10 +251,10 @@ const DashboardLayout = ({
 							</ScrollArea>
 
 							{/* Mobile Footer */}
-							<div className="p-4 border-t border-gray-200">
+							<div className="p-4 border-t border-gray-800">
 								<Button
 									variant="ghost"
-									className="w-full justify-start text-sm text-gray-600 hover:text-gray-900"
+									className="w-full justify-start text-sm text-gray-400 hover:text-white hover:bg-gray-800"
 								>
 									<Settings className="h-4 w-4 mr-2" />
 									Settings
