@@ -39,6 +39,7 @@ const DashboardLayout = ({
 		{ name: "Staff Management", icon: UserCog, path: "/staff" },
 		{ name: "Billing", icon: CreditCard, path: "/billing" },
 		{ name: "Accounting", icon: Calculator, path: "/accounting" },
+		{ name: "Setups", icon: Settings, path: "/setups" },
 	];
 
 	const toggleSidebar = () => {
