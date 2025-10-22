@@ -13,6 +13,8 @@ import Services from "./pages/Services.jsx";
 import StaffManagement from "./pages/StaffManagement.jsx";
 import Billing from "./pages/Billing.jsx";
 import Accounting from "./pages/Accounting.jsx";
+import Setups from "./pages/Setups.jsx";
+import MembershipPlans from "./pages/MembershipPlans.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -46,6 +48,14 @@ const router = createBrowserRouter([
 	{
 		path: "/accounting",
 		element: <Accounting />,
+	},
+	{
+		path: "/setups",
+		element: <Setups />,
+	},
+	{
+		path: "/setups/membership-plans",
+		element: <MembershipPlans />,
 	},
 ]);
 
