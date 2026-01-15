@@ -6,6 +6,7 @@ import {
 	Navigate,
 } from "react-router-dom";
 import "./index.css";
+import { ToastProvider } from "./components/Toast.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import MemberManagement from "./pages/MemberManagement.jsx";
 import EquipmentManagement from "./pages/EquipmentManagement.jsx";
@@ -61,6 +62,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		<RouterProvider router={router} />
+		<ToastProvider>
+			<RouterProvider router={router} />
+		</ToastProvider>
 	</StrictMode>
 );

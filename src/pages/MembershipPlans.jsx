@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import {
 	Card,
@@ -7,6 +7,7 @@ import {
 	CardDescription,
 	CardContent,
 } from "@/components/ui/card";
+import api from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,6 +35,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/components/Toast";
 import {
 	Plus,
 	Edit,
@@ -46,74 +48,9 @@ import {
 import { Link } from "react-router-dom";
 
 const MembershipPlans = () => {
-	const [plans, setPlans] = useState([
-		{
-			id: 1,
-			name: "Daily Pass",
-			price: 500,
-			duration: "daily",
-			maxMembers: 500,
-			features: [
-				"Gym Access",
-				"Locker Room",
-				"Basic Equipment",
-				"1 Day Access",
-			],
-			status: "active",
-			members: 125,
-		},
-		{
-			id: 2,
-			name: "Monthly Membership",
-			price: 5000,
-			duration: "monthly",
-			maxMembers: 300,
-			features: [
-				"Gym Access",
-				"Locker Room",
-				"All Equipment",
-				"30 Days Access",
-				"Guest Pass (2x/month)",
-			],
-			status: "active",
-			members: 180,
-		},
-		{
-			id: 3,
-			name: "Quarterly Membership",
-			price: 12000,
-			duration: "quarterly",
-			maxMembers: 200,
-			features: [
-				"Gym Access",
-				"Locker Room",
-				"All Equipment",
-				"90 Days Access",
-				"Guest Pass (5x/quarter)",
-				"Free Fitness Assessment",
-			],
-			status: "active",
-			members: 85,
-		},
-		{
-			id: 4,
-			name: "Annual Membership",
-			price: 40000,
-			duration: "annually",
-			maxMembers: 150,
-			features: [
-				"Gym Access",
-				"Locker Room",
-				"All Equipment",
-				"365 Days Access",
-				"Unlimited Guest Pass",
-				"Free Fitness Assessment",
-				"Priority Booking",
-			],
-			status: "active",
-			members: 95,
-		},
-	]);
+	const { showToast } = useToast();
+	const [plans, setPlans] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [editingPlan, setEditingPlan] = useState(null);
@@ -121,10 +58,26 @@ const MembershipPlans = () => {
 		name: "",
 		price: "",
 		duration: "",
-		maxMembers: "",
-		features: "",
 		status: "active",
 	});
+
+	// Fetch plans on mount
+	useEffect(() => {
+		fetchPlans();
+	}, []);
+
+	const fetchPlans = async () => {
+		try {
+			setLoading(true);
+			const response = await api.getPlans();
+			setPlans(response.data || []);
+		} catch (error) {
+			console.error("Error fetching plans:", error);
+			showToast("Failed to load plans", "error");
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const handleInputChange = (field, value) => {
 		setFormData((prev) => ({
@@ -133,26 +86,34 @@ const MembershipPlans = () => {
 		}));
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const newPlan = {
-			id: editingPlan ? editingPlan.id : Date.now(),
-			...formData,
-			price: parseFloat(formData.price),
-			maxMembers: parseInt(formData.maxMembers),
-			features: formData.features.split(",").map((f) => f.trim()),
-			members: editingPlan ? editingPlan.members : 0,
-		};
+		try {
+			const planData = {
+				name: formData.name,
 
-		if (editingPlan) {
-			setPlans((prev) =>
-				prev.map((p) => (p.id === editingPlan.id ? newPlan : p))
+				price: parseFloat(formData.price),
+				duration: formData.duration,
+				status: formData.status,
+			};
+
+			if (editingPlan) {
+				await api.updatePlan(editingPlan._id, planData);
+				showToast("Plan updated successfully", "success");
+			} else {
+				await api.createPlan(planData);
+				showToast("Plan created successfully", "success");
+			}
+
+			await fetchPlans();
+			resetForm();
+		} catch (error) {
+			console.error("Error saving plan:", error);
+			showToast(
+				`Failed to ${editingPlan ? "update" : "create"} plan`,
+				"error"
 			);
-		} else {
-			setPlans((prev) => [...prev, newPlan]);
 		}
-
-		resetForm();
 	};
 
 	const resetForm = () => {
@@ -160,8 +121,6 @@ const MembershipPlans = () => {
 			name: "",
 			price: "",
 			duration: "",
-			maxMembers: "",
-			features: "",
 			status: "active",
 		});
 		setEditingPlan(null);
@@ -174,16 +133,21 @@ const MembershipPlans = () => {
 			name: plan.name,
 			price: plan.price.toString(),
 			duration: plan.duration,
-			maxMembers: plan.maxMembers.toString(),
-			features: plan.features.join(", "),
 			status: plan.status,
 		});
 		setIsDialogOpen(true);
 	};
 
-	const handleDelete = (planId) => {
+	const handleDelete = async (planId) => {
 		if (window.confirm("Are you sure you want to delete this plan?")) {
-			setPlans((prev) => prev.filter((p) => p.id !== planId));
+			try {
+				await api.deletePlan(planId);
+				await fetchPlans();
+				showToast("Plan deleted successfully", "success");
+			} catch (error) {
+				console.error("Error deleting plan:", error);
+				showToast("Failed to delete plan", "error");
+			}
 		}
 	};
 
@@ -301,41 +265,7 @@ const MembershipPlans = () => {
 										</Select>
 									</div>
 								</div>
-								<div>
-									<Label htmlFor="maxMembers">
-										Max Members
-									</Label>
-									<Input
-										id="maxMembers"
-										type="number"
-										value={formData.maxMembers}
-										onChange={(e) =>
-											handleInputChange(
-												"maxMembers",
-												e.target.value
-											)
-										}
-										placeholder="100"
-										required
-									/>
-								</div>
-								<div>
-									<Label htmlFor="features">
-										Features (comma-separated)
-									</Label>
-									<Input
-										id="features"
-										value={formData.features}
-										onChange={(e) =>
-											handleInputChange(
-												"features",
-												e.target.value
-											)
-										}
-										placeholder="Gym Access, Locker Room, All Equipment, 30 Days Access"
-										required
-									/>
-								</div>
+
 								<div>
 									<Label htmlFor="status">Status</Label>
 									<Select
@@ -391,101 +321,87 @@ const MembershipPlans = () => {
 									<TableHead>Plan Name</TableHead>
 									<TableHead>Price</TableHead>
 									<TableHead>Duration</TableHead>
-									{/* <TableHead>Members</TableHead> */}
+
 									<TableHead>Status</TableHead>
 									<TableHead>Actions</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{plans.map((plan) => (
-									<TableRow key={plan.id}>
-										<TableCell className="font-medium">
-											<div>
-												<div className="font-semibold">
-													{plan.name}
-												</div>
-												{/* <div className="text-sm text-gray-500">
-													{plan.features
-														.slice(0, 2)
-														.join(", ")}
-													{plan.features.length > 2 &&
-														"..."}
-												</div> */}
-											</div>
-										</TableCell>
-										<TableCell>
-											<div className="flex items-center space-x-1">
-												<span className="font-semibold">
-													KES{" "}
-													{plan.price.toLocaleString()}
-												</span>
-											</div>
-										</TableCell>
-										<TableCell>
-											<div className="flex items-center space-x-1">
-												<span>{plan.duration}</span>
-											</div>
-										</TableCell>
-										{/* <TableCell>
-											<div className="flex items-center space-x-2">
-												<Users className="h-4 w-4 text-purple-600" />
-												<span>
-													{plan.members} /{" "}
-													{plan.maxMembers}
-												</span>
-												<div className="w-16 bg-gray-200 rounded-full h-1.5">
-													<div
-														className="bg-purple-600 h-1.5 rounded-full"
-														style={{
-															width: `${
-																(plan.members /
-																	plan.maxMembers) *
-																100
-															}%`,
-														}}
-													/>
-												</div>
-											</div>
-										</TableCell> */}
-										<TableCell>
-											<Badge
-												className={getStatusColor(
-													plan.status
-												)}
-											>
-												{plan.status}
-											</Badge>
-										</TableCell>
-										<TableCell>
-											<div className="flex space-x-2">
-												<Button
-													variant="ghost"
-													size="sm"
-													onClick={() =>
-														handleEdit(plan)
-													}
-													className="h-8 w-8 p-0"
-												>
-													<Edit className="h-4 w-4" />
-												</Button>
-												<Button
-													variant="ghost"
-													size="sm"
-													onClick={() =>
-														handleDelete(plan.id)
-													}
-													className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-												>
-													<Trash2 className="h-4 w-4" />
-												</Button>
-											</div>
+								{loading ? (
+									<TableRow>
+										<TableCell
+											colSpan={5}
+											className="text-center py-8"
+										>
+											Loading plans...
 										</TableCell>
 									</TableRow>
-								))}
+								) : (
+									plans.map((plan) => (
+										<TableRow key={plan._id}>
+											<TableCell className="font-medium">
+												<div>
+													<div className="font-semibold">
+														{plan.name}
+													</div>
+												</div>
+											</TableCell>
+											<TableCell>
+												<div className="flex items-center space-x-1">
+													<span className="font-semibold">
+														KES{" "}
+														{plan.price.toLocaleString()}
+													</span>
+												</div>
+											</TableCell>
+											<TableCell>
+												<div className="flex items-center space-x-1">
+													<span>{plan.duration}</span>
+												</div>
+											</TableCell>
+
+											<TableCell>
+												<Badge
+													className={getStatusColor(
+														plan.status
+													)}
+												>
+													{plan.status}
+												</Badge>
+											</TableCell>
+											<TableCell>
+												<div className="flex space-x-2">
+													<Button
+														variant="ghost"
+														size="sm"
+														onClick={() =>
+															handleEdit(plan)
+														}
+														className="h-8 w-8 p-0"
+													>
+														<Edit className="h-4 w-4" />
+													</Button>
+													<Button
+														variant="ghost"
+														size="sm"
+														onClick={() =>
+															handleDelete(
+																plan._id
+															)
+														}
+														className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+													>
+														<Trash2 className="h-4 w-4" />
+													</Button>
+												</div>
+											</TableCell>
+										</TableRow>
+									))
+								)}
 							</TableBody>
 						</Table>
 
-						{plans.length === 0 && (
+						{plans.length === 0 && !loading && (
 							<div className="text-center py-8 text-gray-500">
 								No membership plans found. Create your first
 								plan to get started.
