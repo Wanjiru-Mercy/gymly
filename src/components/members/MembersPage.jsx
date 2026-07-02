@@ -229,10 +229,7 @@ const MembersPage = () => {
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.98 }}
 					>
-						<Button
-							onClick={handleAddMember}
-							className="bg-[#4B5CFF] hover:bg-[#3a4ad8] text-white"
-						>
+						<Button onClick={handleAddMember}>
 							<Plus className="h-4 w-4 mr-2" />
 							Add Member
 						</Button>

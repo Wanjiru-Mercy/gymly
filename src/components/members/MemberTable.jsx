@@ -73,14 +73,12 @@ const MemberTable = ({
 					<thead className="bg-gray-50 border-b border-gray-200">
 						<tr>
 							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Full Name
+								Member
 							</th>
 							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Plan
 							</th>
-							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Trainer
-							</th>
+
 							<th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Start Date
 							</th>
@@ -118,9 +116,7 @@ const MemberTable = ({
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
 									{member.plan}
 								</td>
-								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-									{member.trainer}
-								</td>
+
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
 									{formatDate(member.startDate)}
 								</td>
@@ -194,14 +190,7 @@ const MemberTable = ({
 										{member.plan}
 									</span>
 								</div>
-								<div>
-									<span className="text-gray-500">
-										Trainer:
-									</span>
-									<span className="ml-1 text-gray-900">
-										{member.trainer}
-									</span>
-								</div>
+
 								<div>
 									<span className="text-gray-500">
 										Start:

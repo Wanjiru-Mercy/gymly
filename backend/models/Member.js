@@ -14,7 +14,7 @@ const memberSchema = new mongoose.Schema(
 		},
 		email: {
 			type: String,
-			required: [true, "Email is required"],
+			required: [false, "Email is required"],
 			unique: true,
 			lowercase: true,
 			trim: true,
@@ -30,17 +30,14 @@ const memberSchema = new mongoose.Schema(
 			type: String,
 			enum: ["male", "female", "other"],
 		},
-		address: {
-			street: String,
-			city: String,
-			state: String,
-			zipCode: String,
+		residence: {
+			type: String,
 		},
 		membershipPlan: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Plan",
 		},
-		joinDate: {
+		startDate: {
 			type: Date,
 			default: Date.now,
 		},
@@ -53,12 +50,6 @@ const memberSchema = new mongoose.Schema(
 			name: String,
 			phone: String,
 			relationship: String,
-		},
-		photo: {
-			type: String,
-		},
-		notes: {
-			type: String,
 		},
 	},
 	{
