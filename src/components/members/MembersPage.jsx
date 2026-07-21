@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import MemberTable from "./MemberTable";
 import MemberForm from "./MemberForm";
 import MemberDetails from "./MemberDetails";
+import { EnrollmentForm } from "@/features/biometric-signin";
 
 // Mock data - replace with API calls later
 const mockMembers = [
@@ -90,8 +91,10 @@ const MembersPage = () => {
 	const [filterStatus, setFilterStatus] = useState("All");
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+	const [isBiometricsOpen, setIsBiometricsOpen] = useState(false);
 	const [selectedMember, setSelectedMember] = useState(null);
 	const [editingMember, setEditingMember] = useState(null);
+	const [biometricsMember, setBiometricsMember] = useState(null);
 
 	// Load mock data on component mount
 	useEffect(() => {
@@ -182,6 +185,21 @@ const MembersPage = () => {
 		setIsFormOpen(true);
 	};
 
+	const handleRegisterBiometrics = (member) => {
+		setBiometricsMember(member);
+		setIsBiometricsOpen(true);
+	};
+
+	const handleDetailsRegisterBiometrics = () => {
+		setIsDetailsOpen(false);
+		handleRegisterBiometrics(selectedMember);
+	};
+
+	const handleBiometricsClose = () => {
+		setIsBiometricsOpen(false);
+		setBiometricsMember(null);
+	};
+
 	return (
 		<div className="space-y-6">
 			{/* Top Bar */}
@@ -243,6 +261,7 @@ const MembersPage = () => {
 				onView={handleViewMember}
 				onEdit={handleEditMember}
 				onDelete={handleDeleteMember}
+				onRegisterBiometrics={handleRegisterBiometrics}
 				searchTerm={searchTerm}
 				filterStatus={filterStatus}
 			/>
@@ -272,7 +291,19 @@ const MembersPage = () => {
 						member={selectedMember}
 						onClose={handleDetailsClose}
 						onEdit={handleDetailsEdit}
+						onRegisterBiometrics={handleDetailsRegisterBiometrics}
 					/>
+				)}
+			</AnimatePresence>
+
+			{/* Register Biometrics Modal */}
+			<AnimatePresence>
+				{isBiometricsOpen && (
+					<Dialog open={isBiometricsOpen} onOpenChange={handleBiometricsClose}>
+						<DialogContent className="max-w-lg">
+							<EnrollmentForm initialMemberEmail={biometricsMember?.email} />
+						</DialogContent>
+					</Dialog>
 				)}
 			</AnimatePresence>
 		</div>

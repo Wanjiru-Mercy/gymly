@@ -5,6 +5,7 @@ import { ToastProvider } from "@/components/Toast";
 
 const App = () => {
 	const location = useLocation();
+	const currentYear = new Date().getFullYear();
 
 	return (
 		<ToastProvider>
@@ -68,7 +69,7 @@ const App = () => {
 				<footer className="border-t mt-16">
 					<div className="container mx-auto px-4 py-8">
 						<div className="text-center text-sm text-muted-foreground">
-							© 2025 Gymly. All rights reserved.
+							&copy; {currentYear} Gymly. All rights reserved.
 						</div>
 					</div>
 				</footer>

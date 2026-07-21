@@ -8,6 +8,7 @@ import memberRoutes from './routes/memberRoutes.js';
 import equipmentRoutes from './routes/equipmentRoutes.js';
 import planRoutes from './routes/planRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import biometricSignInRoutes from './modules/biometric-signin/index.js';
 
 // Load env vars
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/api/members', memberRoutes);
 app.use('/api/equipment', equipmentRoutes);
 app.use('/api/plans', planRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/biometric', biometricSignInRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

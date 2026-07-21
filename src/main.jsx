@@ -16,6 +16,8 @@ import Billing from "./pages/Billing.jsx";
 import Accounting from "./pages/Accounting.jsx";
 import Setups from "./pages/Setups.jsx";
 import MembershipPlans from "./pages/MembershipPlans.jsx";
+import BiometricSignIn from "./pages/BiometricSignIn.jsx";
+import BiometricCheckIn from "./pages/BiometricCheckIn.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
 	{
 		path: "/setups/membership-plans",
 		element: <MembershipPlans />,
+	},
+	{
+		path: "/biometric-signin",
+		element: <BiometricSignIn />,
+	},
+	{
+		path: "/biometric-signin/checkin",
+		element: <BiometricCheckIn />,
 	},
 ]);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Eye, Edit, Trash2, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -9,6 +9,7 @@ const MemberTable = ({
 	onView,
 	onEdit,
 	onDelete,
+	onRegisterBiometrics,
 	searchTerm,
 	filterStatus,
 }) => {
@@ -147,6 +148,15 @@ const MemberTable = ({
 										<Button
 											variant="ghost"
 											size="sm"
+											onClick={() => onRegisterBiometrics(member)}
+											title="Register Biometrics"
+											className="h-8 w-8 p-0 hover:bg-purple-50 hover:text-purple-600"
+										>
+											<Fingerprint className="h-4 w-4" />
+										</Button>
+										<Button
+											variant="ghost"
+											size="sm"
 											onClick={() => onDelete(member.id)}
 											className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
 										>
@@ -207,12 +217,12 @@ const MemberTable = ({
 								</div>
 							</div>
 
-							<div className="flex space-x-2">
+							<div className="grid grid-cols-2 gap-2">
 								<Button
 									variant="ghost"
 									size="sm"
 									onClick={() => onView(member)}
-									className="flex-1 h-8 hover:bg-blue-50 hover:text-blue-600"
+									className="h-8 hover:bg-blue-50 hover:text-blue-600"
 								>
 									<Eye className="h-4 w-4 mr-1" />
 									View
@@ -221,7 +231,7 @@ const MemberTable = ({
 									variant="ghost"
 									size="sm"
 									onClick={() => onEdit(member)}
-									className="flex-1 h-8 hover:bg-amber-50 hover:text-amber-600"
+									className="h-8 hover:bg-amber-50 hover:text-amber-600"
 								>
 									<Edit className="h-4 w-4 mr-1" />
 									Edit
@@ -229,8 +239,17 @@ const MemberTable = ({
 								<Button
 									variant="ghost"
 									size="sm"
+									onClick={() => onRegisterBiometrics(member)}
+									className="h-8 hover:bg-purple-50 hover:text-purple-600"
+								>
+									<Fingerprint className="h-4 w-4 mr-1" />
+									Biometrics
+								</Button>
+								<Button
+									variant="ghost"
+									size="sm"
 									onClick={() => onDelete(member.id)}
-									className="flex-1 h-8 hover:bg-red-50 hover:text-red-600"
+									className="h-8 hover:bg-red-50 hover:text-red-600"
 								>
 									<Trash2 className="h-4 w-4 mr-1" />
 									Delete

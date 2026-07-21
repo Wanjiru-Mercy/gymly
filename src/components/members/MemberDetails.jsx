@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X, Mail, Phone, Calendar, User, Dumbbell } from "lucide-react";
+import { X, Mail, Phone, Calendar, User, Dumbbell, Fingerprint } from "lucide-react";
 
-const MemberDetails = ({ member, onClose, onEdit }) => {
+const MemberDetails = ({ member, onClose, onEdit, onRegisterBiometrics }) => {
 	if (!member) return null;
 
 	const getStatusBadge = (status) => {
@@ -105,6 +105,15 @@ const MemberDetails = ({ member, onClose, onEdit }) => {
 									className="hover:bg-[#4B5CFF] hover:text-white"
 								>
 									Edit Member
+								</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={onRegisterBiometrics}
+									className="hover:bg-purple-600 hover:text-white"
+								>
+									<Fingerprint className="h-4 w-4 mr-1" />
+									Register Biometrics
 								</Button>
 								<Button
 									variant="ghost"

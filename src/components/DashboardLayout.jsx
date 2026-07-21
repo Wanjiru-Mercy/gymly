@@ -16,6 +16,7 @@ import {
 	Search,
 	Settings,
 	LogOut,
+	Fingerprint,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ const DashboardLayout = ({
 	const [sidebarOpen, setSidebarOpen] = useState(true);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const location = useLocation();
+	const currentYear = new Date().getFullYear();
 
 	const modules = [
 		{ name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
@@ -37,6 +39,7 @@ const DashboardLayout = ({
 		{ name: "Equipment Management", icon: Dumbbell, path: "/equipment" },
 		{ name: "Services", icon: Sparkles, path: "/services" },
 		{ name: "Staff Management", icon: UserCog, path: "/staff" },
+		{ name: "Biometric Sign-In", icon: Fingerprint, path: "/biometric-signin" },
 		{ name: "Billing", icon: CreditCard, path: "/billing" },
 		{ name: "Accounting", icon: Calculator, path: "/accounting" },
 		{ name: "Setups", icon: Settings, path: "/setups" },
@@ -158,7 +161,7 @@ const DashboardLayout = ({
 								Settings
 							</Button>
 							<div className="text-xs text-gray-500 text-center pt-2">
-								© 2025 Gymly
+								&copy; {currentYear} Gymly
 							</div>
 						</div>
 					) : (

@@ -8,6 +8,14 @@
   </head>
   <body>
     <div id="root"></div>
+    <!--
+      HID DigitalPersona WebSdk runtime, vendored from
+      node_modules/@digitalpersona/devices/@types/WebSdk/index.js.
+      Required by @digitalpersona/devices to talk to the DigitalPersona
+      Workstation/ADC client running on this machine. Re-copy this file
+      if @digitalpersona/devices is upgraded.
+    -->
+    <script src="/vendor/digitalpersona-websdk.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
